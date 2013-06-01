@@ -4,9 +4,18 @@ A simple and speedy web spider for pages downloading.
 
 SpeedSpider is based on ruby spider framework [Anemone][1], it's easy to use and very fast since it uses threads for page fetching.
 
-## What kind of files will be downloaded
+## SpeedSpider was made with below in mind
 
-### links in html pages
+* download files from a site with a start url
+* option for downloading part site obeying a base url, any page not starts with `base_url` will not be downloaded
+* assets files like css, js, image and font should be downloaded besides html files, and not obey `base_url` rule
+* image file include in css file should be download
+* url from site other than the start url should not be downloaded
+* download files should be save with the same structure with the origin site
+
+## How it works
+
+### links in html pages searched by
 
 * link,        xpath: `//a[@href]`
 * stylesheet,  xpath: `//link[@href]`
@@ -14,9 +23,9 @@ SpeedSpider is based on ruby spider framework [Anemone][1], it's easy to use and
 * iframe file, xpath: `//iframe[@src]`
 * image file,  xpath: `//img[@src]`
 
-### urls in stylesheet files
+### urls in stylesheet files searched by
 
-* urls with parttern url\((.*)\)
+* urls with parttern `url\((.*)\)`
 
 ## Installation
 
