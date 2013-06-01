@@ -4,15 +4,18 @@ require 'ostruct'
 
 module SpeedSpider
   class Cli
-    attr_accessor :options
+    attr_reader :options, :option_parser
 
     def initialize
       @options = {
+        # only url start with base_url will save to local
         :base_url => '',
+        # directory for downloaded files to save to
+        :dir => 'download',
         # run 4 Tentacle threads to fetch pages
         :threads => 4,
-        # disable verbose output
-        :verbose => false,
+        # verbose output
+        :verbose => true,
         # don't throw away the page response body after scanning it for links
         :discard_page_bodies => false,
         # identify self as WebCrawler/VERSION
@@ -43,13 +46,17 @@ module SpeedSpider
     end
 
     def parse!
-      option_parser = OptionParser.new do |opts|
+      @option_parser = OptionParser.new do |opts|
         opts.banner = "Usage: speed_spider [options] start_url"
         opts.separator ""
         opts.separator "options:"
 
-        opts.on('-v', '--verbose', 'verbose output') do
-          @options[:verbose] = true
+        opts.on('-S', '--slient', 'slient output') do
+          @options[:verbose] = false
+        end
+
+        opts.on('-D', '--dir String', 'directory for download files to save to. "download" by default') do |value|
+          options[:dir]  = value
         end
 
         opts.on('-b', '--base_url String', 'any url not starts with base_url will not be saved') do |value|
@@ -57,7 +64,7 @@ module SpeedSpider
           options[:base_url]  = value
         end
 
-        opts.on('-t', '--threads Integer', Integer, 'threads to run for fetching pages') do |value|
+        opts.on('-t', '--threads Integer', Integer, 'threads to run for fetching pages, 4 by default') do |value|
           @options[:threads] = value
         end
 
@@ -65,7 +72,7 @@ module SpeedSpider
           @options[:user_agent] = value
         end
 
-        opts.on('-d', '--delay Integer', Integer, 'delay between requests') do |value|
+        opts.on('-d', '--delay Integer', Integer, 'delay between requests in seconds') do |value|
           @options[:delay] = value
         end
 
@@ -81,10 +88,6 @@ module SpeedSpider
           @options[:redirect_limit] = value
         end
 
-        opts.on('-c', '--cookies Name', 'Hash of cookie name => value to send with HTTP requests') do |value|
-          @options[:cookies] = value
-        end
-
         opts.on('-a', '--accept_cookies', 'accept cookies from the server and send them back?') do
           @options[:accept_cookies] = true
         end
@@ -93,20 +96,26 @@ module SpeedSpider
           @options[:skip_query_strings] = true
         end
 
-        opts.on('--proxy_host String', 'proxy server hostname') do |value|
+        opts.on('-H', '--proxy_host String', 'proxy server hostname') do |value|
           @options[:proxy_host] = value
         end
 
-        opts.on('--proxy_port String', Integer, 'proxy server port number') do |value|
+        opts.on('-P', '--proxy_port Integer', Integer, 'proxy server port number') do |value|
           @options[:proxy_port] = value
         end
 
-        opts.on('--read_timeout Integer', Integer, 'HTTP read timeout in seconds') do |value|
+        opts.on('-T', '--read_timeout Integer', Integer, 'HTTP read timeout in seconds') do |value|
           @options[:read_timeout] = value
+        end
+
+        # print the version.
+        opts.on_tail("-V", "--version", "Show version") do
+          puts SpeedSpider::VERSION
+          exit
         end
       end
 
-      option_parser.parse!
+      @option_parser.parse!
 
       self
     end

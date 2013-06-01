@@ -1,6 +1,7 @@
 require 'anemone'
 require 'speed_spider/anemone_hack'
 require 'fileutils'
+require 'uri'
 
 module SpeedSpider
   class Crawler
@@ -12,7 +13,7 @@ module SpeedSpider
 
     # return urls from css file contents
     def get_urls_from_css data, pos = 0
-      if m = data.match(/url\((.*?)\)/, pos)
+      if m = data.match(/url\((.*?)\)/i, pos)
         [ m[1] ] + get_urls_from_css(data, m.end(1) + 1)
       else
         []
@@ -55,10 +56,10 @@ module SpeedSpider
     def after_crawl
       lambda { |pages|
         pages.each do |url, page|
-          path = url.sub @base_url, ''
+          path = page.url.path
           path += 'index.html' if path.end_with? '/' or path.empty?
-          path = path.split('?')[0]
 
+          path = "#{@options[:dir]}/#{page.url.host}#{path}"
           dir = File.dirname path
 
           FileUtils.mkdir_p dir unless dir.empty?
