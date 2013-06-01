@@ -47,7 +47,7 @@ module SpeedSpider
 
     def parse!
       @option_parser = OptionParser.new do |opts|
-        opts.banner = "Usage: speed_spider [options] start_url"
+        opts.banner = "Usage: spider [options] start_url"
         opts.separator ""
         opts.separator "options:"
 

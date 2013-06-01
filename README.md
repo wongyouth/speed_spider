@@ -25,7 +25,7 @@ install it with rubygem:
     gem install 'speed_spider'
 
 ## Usage
-    Usage: speed_spider [options] start_url
+    Usage: spider [options] start_url
 
     options:
         -S, --slient                     slient output
@@ -46,11 +46,11 @@ install it with rubygem:
 
 ## Example
 
-    speed_spider http://twitter.github.io/bootstrap/
+    spider http://twitter.github.io/bootstrap/
 
 It will download all files within the same domain  as `twitter.github.io`, and save to `download/twitter.github.io/`.
 
-    speed_spider -b http://ruby-doc.org/core-2.0/ http://ruby-doc.org/core-2.0/
+    spider -b http://ruby-doc.org/core-2.0/ http://ruby-doc.org/core-2.0/
 
 It will only download urls start with `http://ruby-doc.org/core-2.0/`, notice `assets` files like image, css, js, font will not obey `base_url` rule.
 
