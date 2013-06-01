@@ -1,13 +1,12 @@
 require 'anemone'
-require 'anemone_hack'
+require 'speed_spider/anemone_hack'
 require 'fileutils'
 
 module SpeedSpider
   class Crawler
-    def initialize(start_url, base_url, options)
-      base_url += '/' unless base_url.end_with? '/'
+    def initialize(start_url, options)
       @start_url = start_url
-      @base_url = base_url
+      @base_url = options[:base_url]
       @options = options
     end
 
@@ -67,7 +66,7 @@ module SpeedSpider
             f.write page.body
           end
 
-          puts "save file #{path}" if ane.opts[:verbose]
+          puts "save file #{path}" if @options[:verbose]
         end
       }
     end

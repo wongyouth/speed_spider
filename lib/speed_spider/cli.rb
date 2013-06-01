@@ -4,10 +4,11 @@ require 'ostruct'
 
 module SpeedSpider
   class Cli
-    attr_accessor :options, :base_url
+    attr_accessor :options
 
     def initialize
-      @options = Hash.new(
+      @options = {
+        :base_url => '',
         # run 4 Tentacle threads to fetch pages
         :threads => 4,
         # disable verbose output
@@ -38,23 +39,22 @@ module SpeedSpider
         :proxy_port => false,
         # HTTP read timeout in seconds
         :read_timeout => nil
-      )
+      }
     end
 
     def parse!
-
       option_parser = OptionParser.new do |opts|
         opts.banner = "Usage: speed_spider [options] start_url"
         opts.separator ""
         opts.separator "options:"
 
-        @options[:verbose] = true
         opts.on('-v', '--verbose', 'verbose output') do
           @options[:verbose] = true
         end
 
-        opts.on('-b', '--base_url String', 'only start with base_url will save to files') do |value|
-          options[:base_url] = @base_url = value
+        opts.on('-b', '--base_url String', 'any url not starts with base_url will not be saved') do |value|
+          value += '/' unless value.end_with? '/'
+          options[:base_url]  = value
         end
 
         opts.on('-t', '--threads Integer', Integer, 'threads to run for fetching pages') do |value|
@@ -105,6 +105,8 @@ module SpeedSpider
           @options[:read_timeout] = value
         end
       end
+
+      option_parser.parse!
 
       self
     end
