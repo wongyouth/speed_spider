@@ -9,7 +9,7 @@ SpeedSpider is based on ruby spider framework [Anemone][1], it's easy to use and
 ### links in html pages
 
 * link,        xpath: `//a[@href]`
-* stylesheet,  xpath: `//link[@src]`
+* stylesheet,  xpath: `//link[@href]`
 * javascript,  xpath: `//script[@src]`
 * iframe file, xpath: `//iframe[@src]`
 * image file,  xpath: `//img[@src]`
@@ -52,7 +52,7 @@ It will download all files within the same domain  as `twitter.github.io`, and s
 
     speed_spider -b http://ruby-doc.org/core-2.0/ http://ruby-doc.org/core-2.0/
 
-It will only download urls start with http://ruby-doc.org/core-2.0/, notice `assets` files like image, css, js, font will not obey `base_url` rule.
+It will only download urls start with `http://ruby-doc.org/core-2.0/`, notice `assets` files like image, css, js, font will not obey `base_url` rule.
 
 ## Contributing
 
